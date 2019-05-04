@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Album;
 
 class AlbumsController extends Controller
 {
     public function index()
     {
-        return view('albums.index');
+        $albums = Album::with('Photos')->get();
+        return view('albums.index')->with('albums', $albums);
     }
 
     public function create()
@@ -43,7 +45,13 @@ class AlbumsController extends Controller
         // upload image
         $path = $file->storeAs('public/album_covers', $fileNameToStore);
 
-        return $path;
+        // Create album
+        $album = new Album;
+        $album->name = $request->input('name');
+        $album->description = $request->input('description');
+        $album->cover_image = $fileNameToStore;
+        $album->save();
+        return redirect('/albums')->with('success','Album Created');
 
         /*
             //Display File Name
@@ -70,4 +78,10 @@ class AlbumsController extends Controller
         
         
     }
+    
+    public function show($id) {
+        $album = Album::with('Photos')->find($id);
+        return view('albums.show')->with('album', $album);
+    }
+
 }

@@ -4,9 +4,9 @@
     <h3>Create Album</h3>
     {{ Form::open(['action' => 'AlbumsController@store','method' => 'POST', 'files'=>'true' ]) }}
         {{ Form::text('name', '', ['placeholder'=>'Album Name']) }}
-        {{ Form::text('description', '', ['placeholder'=>'Album Description']) }}
+        {{ Form::textarea('description', '', ['placeholder'=>'Album Description','rows'=>4]) }}
         {{ Form::file('cover_image') }}
-        {{ Form::submit('submit') }}
+        {{ Form::submit('submit',['class'=>'button primary']) }}
     {{ Form::close() }}
 @endsection
 
